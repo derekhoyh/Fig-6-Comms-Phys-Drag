@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Queue (hour, day, week)
+#BSUB -q day_lowmem
+
+# Number of slots
+#BSUB -n 1
+
+# Slots per node (32 = fat nodes)
+#BSUB -R "span[ptile=16]"
+
+# Shared memory in MB 
+#BSUB -R "rusage[mem=2000]"
+
+# Job duration in hours
+#BSUB -W 24:00
+
+# Job name
+#BSUB -J “sigmaDloop”
+
+# Job output file
+#BSUB -o lsf%J.o
+
+# Job error file
+#BSUB -e lsf%J.e
+
+# Define our variables here
+export OMP_NUM_THREADS=1
+
+# Now run the program
+
+# Compiled matlab (doesn't check licenses)
+# to compile, /opt/apps/matlab/R2015b/bin/mcc -m notebook.m
+# replace notebook with the name of your notebook
+
+JOB_DIR=$(pwd)
+export LOCAL_SCRATCHDIR=/scratch/tmp_$LSB_JOBID
+
+./run_rhodtoymodel.sh /opt/apps/matlab/R2015b 
+
+# A great deal of time and money has been put into GRC's dedicated research computing resources.
+# Publications that have made use of these resources should make reference of that in the acknowledgements.    
